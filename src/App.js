@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core";
 import Add from "./components/Add";
 import Single from "./components_post/single";
 import Login from "./components_login/Login";
+import Signup from "./components_login/Signup";
 
 const usestyles = makeStyles((theme) => ({
   right: {
@@ -49,7 +50,7 @@ const App = () => {
             </Grid>
           </Route>
           <Route exact path="/login">
-            <Login/>
+            <Signup />
           </Route>
         </Switch>
       </div>
