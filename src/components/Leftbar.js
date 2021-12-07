@@ -9,6 +9,7 @@ import {
   ExitToApp,
   Category,
 } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
 const usestyles = makeStyles((theme) => ({
   container: {
@@ -58,8 +59,9 @@ const Leftbar = () => {
         <Typography className={classes.text}>About</Typography>
       </div>
       <div className={classes.item}>
-        <Home className={classes.icon} />
-        <Typography className={classes.text}>Homepage</Typography>
+          <Home className={classes.icon} />
+          <Typography className={classes.text}>Homepage</Typography>
+        
       </div>
       <div className={classes.item}>
         <Create className={classes.icon} />

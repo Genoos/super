@@ -9,6 +9,9 @@ import {
   CardActions,
   Button,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const usestyles = makeStyles((theme) => ({
   media: {
@@ -26,26 +29,41 @@ const usestyles = makeStyles((theme) => ({
   },
 }));
 
-const Post = () => {
+const Post = ({ post }) => {
   const classes = usestyles();
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  const [like, setlike] = useState(post.likes);
+  const [isliked, setisliked] = useState(false);
+  const likehandler = () => {
+    setlike(isliked ? like - 1 : like + 1);
+    setisliked(!isliked);
+  };
+
+  const [user, setuser] = useState({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = axios.get(`users/${post.userId}`);
+      setuser(res.data);
+    };
+    fetchUser();
+  }, []);
   return (
     <Card className={classes.card}>
       <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image="https://images.pexels.com/photos/6785291/pexels-photo-6785291.jpeg?cs=srgb&dl=pexels-limuel-gonzales-6785291.jpg&fm=jpg"
-          title="My post"
-        />
+        <Link to={`post/${post._id}`}>
+          <CardMedia
+            className={classes.media}
+            image={PF + post.Photo}
+            title={"My post"}
+          />
+        </Link>
         <CardContent>
           <Typography gutterBottom variant="h5">
-            My first post
+            {post.title}
           </Typography>
-          <Typography variant="body2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur
-            quo nisi cupiditate ea incidunt impedit fugit harum, alias odit
-            deleniti, corrupti est minima eligendi ut temporibus quibusdam sunt
-            id placeat.
-          </Typography>
+          <Typography variant="body2">{post.description}</Typography>
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.cardactions}>
@@ -56,9 +74,8 @@ const Post = () => {
           {" "}
           comment
         </Button>
-        <Button variant="outlined" size="samll">
-          {" "}
-          upvote
+        <Button variant="outlined" size="samll" onClick={likehandler}>
+          {`${like} likes`}
         </Button>
       </CardActions>
     </Card>

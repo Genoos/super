@@ -6,6 +6,9 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const usestyles = makeStyles((theme) => ({
   media: {
@@ -26,32 +29,49 @@ const usestyles = makeStyles((theme) => ({
 
 const Singlepost = () => {
   const classes = usestyles();
+  const location = useLocation();
+  const path = location.pathname.split("/")[2];
+  const [post, setPost] = useState({});
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  useEffect(() => {
+    const getPost = async () => {
+      const res = await axios.get("/posts/" + path);
+      setPost(res.data);
+    };
+    getPost();
+  }, [path]);
+
+  const [user, setuser] = useState({});
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = axios.get(`users/${post.userId}`);
+      setuser(res.data);
+    };
+    fetchUser();
+  }, []);
   return (
     <>
       <Card className={classes.card}>
         <CardActionArea>
           <CardMedia
             className={classes.media}
-            image="https://images.pexels.com/photos/6785291/pexels-photo-6785291.jpeg?cs=srgb&dl=pexels-limuel-gonzales-6785291.jpg&fm=jpg"
+            image={PF + post.Photo}
             title="My post"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" className={classes.title}>
-              My first post
+              {post.title}
             </Typography>
           </CardContent>
         </CardActionArea>
       </Card>
       <Card className={classes.content}>
         <Typography variant="h6" align="center" color="blue">
-          Author
+          {post.userId}
         </Typography>
-        <Typography variant="subtitle1">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Debitis
-          corrupti quisquam minima neque animi, pariatur excepturi temporibus,
-          totam dolore perferendis nobis nam at, magnam dicta. Quisquam iste est
-          iusto dolorum?
-        </Typography>
+        <Typography variant="subtitle1">{post.description}</Typography>
       </Card>
     </>
   );

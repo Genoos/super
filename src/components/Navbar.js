@@ -8,6 +8,7 @@ import {
   Badge,
   Avatar,
   Modal,
+  Link,
 } from "@material-ui/core";
 import {
   Search,
@@ -17,6 +18,7 @@ import {
   AccountCircle,
 } from "@material-ui/icons";
 import { React, useState } from "react";
+import { Link } from "react-router-dom";
 
 const usestyles = makeStyles((theme) => ({
   toolbar: {
@@ -80,9 +82,11 @@ const Navbar = () => {
     <>
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
-          <Typography variant="h5" className={classes.logoLg}>
-            lama dev
-          </Typography>
+          <Link to="/" style={{ textDecoration: none }}>
+            <Typography variant="h5" className={classes.logoLg}>
+              lama dev
+            </Typography>
+          </Link>
           <Typography variant="h6" className={classes.logoSm}>
             Lama
           </Typography>
