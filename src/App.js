@@ -23,15 +23,15 @@ const usestyles = makeStyles((theme) => ({
 
 const App = () => {
   const classes = usestyles();
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await axios.get("/posts");
+  // const [posts, setPosts] = useState([]);
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     const res = await axios.get("/posts");
 
-      setPosts(res.data);
-    };
-    fetchPosts();
-  }, []);
+  //     setPosts(res.data);
+  //   };
+  //   fetchPosts();
+  // }, []);
 
   return (
     <Router>
@@ -44,7 +44,7 @@ const App = () => {
                 <Leftbar />
               </Grid>
               <Grid item sm={7} xs={10}>
-                <Feed posts={posts} />
+                <Feed />
               </Grid>
               <Grid item sm={3} className={classes.right}>
                 <Rightbar />
@@ -71,7 +71,7 @@ const App = () => {
               </Grid>
               <Grid item sm={10} xs={10}>
                 <Profile />
-                <Feed posts={posts} />
+                <Feed />
               </Grid>
             </Grid>
           </Route>

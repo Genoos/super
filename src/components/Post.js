@@ -49,13 +49,14 @@ const Post = ({ post }) => {
     };
     fetchUser();
   }, []);
+
   return (
     <Card className={classes.card}>
       <CardActionArea>
         <Link to={`post/${post._id}`}>
           <CardMedia
             className={classes.media}
-            image={PF + post.Photo}
+            image={PF + "post/" + post.Photo}
             title={"My post"}
           />
         </Link>

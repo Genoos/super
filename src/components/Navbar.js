@@ -8,7 +8,6 @@ import {
   Badge,
   Avatar,
   Modal,
-  Link,
 } from "@material-ui/core";
 import {
   Search,
@@ -27,6 +26,7 @@ const usestyles = makeStyles((theme) => ({
   },
   logoLg: {
     display: "none",
+    textDecorationLine: "none",
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
@@ -82,7 +82,7 @@ const Navbar = () => {
     <>
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
-          <Link to="/" style={{ textDecoration: none }}>
+          <Link to="/">
             <Typography variant="h5" className={classes.logoLg}>
               lama dev
             </Typography>

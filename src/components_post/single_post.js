@@ -57,7 +57,7 @@ const Singlepost = () => {
         <CardActionArea>
           <CardMedia
             className={classes.media}
-            image={PF + post.Photo}
+            image={PF + "post/" + post.Photo}
             title="My post"
           />
           <CardContent>
