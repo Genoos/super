@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useRef } from "react";
 import {
   makeStyles,
   Fab,
@@ -14,10 +14,13 @@ import {
   Radio,
   Button,
   Snackbar,
+  PremMedia,
 } from "@material-ui/core";
 import MuiAlert from "@mui/material/Alert";
 import { Add as Addicon, Create } from "@material-ui/icons";
 import { useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 const usestyles = makeStyles((theme) => ({
   fab: {
@@ -56,6 +59,39 @@ const Add = () => {
   const classes = usestyles();
   const [open, setopen] = useState(false);
   const [opensnack, setopensnack] = useState(false);
+  const [file, setFile] = useState(null);
+  const user = useContext(AuthContext);
+  const desc = useRef();
+  const title = useRef();
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  // const FileInput = () => {
+  //   return <input accept="image/*" type="file" id="select-image" />;
+  // };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const newPost = {
+      title: e.target.title.value,
+      userId: user._id,
+      desc: desc.current.value,
+      ussername: user.username,
+    };
+    if (file) {
+      const data = new FormData();
+      const fileName = Date.now() + file.name;
+      data.append("name", fileName);
+      data.append("file", file);
+      newPost.img = fileName;
+      console.log(newPost);
+      try {
+        await axios.post("/upload", data);
+      } catch (err) {}
+    }
+    try {
+      await axios.post("/posts", newPost);
+      window.location.reload();
+    } catch (err) {}
+  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -73,9 +109,18 @@ const Add = () => {
       </Tooltip>
       <Modal open={open} className={classes.modal}>
         <Container className={classes.container}>
-          <form className={classes.form} autoComplete="off">
+          <form
+            className={classes.form}
+            autoComplete="off"
+            onSubmit={submitHandler}
+          >
             <div>
-              <TextField variant="outlined" label="Title" margin="normal" />
+              <TextField
+                variant="outlined"
+                label="Title"
+                margin="normal"
+                ref={title}
+              />
             </div>
             <div>
               <TextField
@@ -87,6 +132,7 @@ const Add = () => {
                 size="small"
                 margin="normal"
                 style={{ width: "100%" }}
+                ref={desc}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -95,6 +141,24 @@ const Add = () => {
                   ),
                 }}
               />
+            </div>
+            <div>
+              <input
+                accept="image/*"
+                type="file"
+                id="select-image"
+                style={{ display: "none" }}
+              />
+              <label htmlFor="select-image">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component="span"
+                  onClick={(e) => setFile(e.target.files[0])}
+                >
+                  Upload Image
+                </Button>
+              </label>
             </div>
             <div className={classes.item}>
               <TextField
@@ -143,6 +207,7 @@ const Add = () => {
                 variant="outlined"
                 color="primary"
                 style={{ marginRight: "20px" }}
+                type="submit"
                 onClick={() => setopensnack(true)}
               >
                 Post
