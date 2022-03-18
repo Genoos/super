@@ -1,26 +1,32 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles, Container } from "@material-ui/core";
 import Post from "./Post";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Singlepost from "../components_post/single_post";
+import { AuthContext } from "../context/AuthContext";
 
 const usestyles = makeStyles((theme) => ({
   container: {
-    paddingTop: theme.spacing(10),
+    paddingTop: theme.spacing(20),
   },
 }));
 
-const Feed = () => {
+const Feed = ({ username }) => {
   const classes = usestyles();
   const [posts, setPosts] = useState([]);
+  const user = useContext(AuthContext);
+
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get("posts/timeline/61a90b093a450fba2bfaf9cf");
+      const res = username
+        ? await axios.get("/posts/profile/" + username)
+        : await axios.get("/posts/timeline/" + user._id);
       setPosts(res.data);
     };
     fetchPosts();
-  }, []);
+    console.log(posts);
+  }, [username, user._id]);
   return (
     <Container className={classes.container}>
       {posts.map((p) => (

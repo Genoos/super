@@ -16,8 +16,9 @@ import {
   Cancel,
   AccountCircle,
 } from "@material-ui/icons";
-import { React, useState } from "react";
+import { React, useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext.js";
 
 const usestyles = makeStyles((theme) => ({
   toolbar: {
@@ -26,7 +27,6 @@ const usestyles = makeStyles((theme) => ({
   },
   logoLg: {
     display: "none",
-    textDecorationLine: "none",
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
@@ -75,14 +75,16 @@ const usestyles = makeStyles((theme) => ({
 
 const Navbar = () => {
   const [open, setopen] = useState(false);
+  const { user } = useContext(AuthContext);
   // const [openlogin, setopenlogin] = useState(false);
   const classes = usestyles({ open });
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   return (
     <>
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
-          <Link to="/">
+          <Link to="/" style={{ textDecoration: "none" }}>
             <Typography variant="h5" className={classes.logoLg}>
               lama dev
             </Typography>
@@ -107,11 +109,18 @@ const Navbar = () => {
             <Badge badgeContent={3} color="secondary" className={classes.badge}>
               <Notifications />
             </Badge>
-            <Avatar
-              alt="user"
-              // onClick={() => setopenlogin(true)}
-              src="https://images.pexels.com/photos/6785291/pexels-photo-6785291.jpeg?cs=srgb&dl=pexels-limuel-gonzales-6785291.jpg&fm=jpg"
-            />
+            <Link to={`profile/${user.username}`}>
+              <Avatar
+                alt="user"
+                // onClick={() => setopenlogin(true)}
+                // src="https://images.pexels.com/photos/6785291/pexels-photo-6785291.jpeg?cs=srgb&dl=pexels-limuel-gonzales-6785291.jpg&fm=jpg"
+                src={
+                  user.profilePicture
+                    ? `${PF}/persons/${user.profilePicture}`
+                    : `${PF}/persons/2.jpeg`
+                }
+              />
+            </Link>
           </div>
         </Toolbar>
       </AppBar>

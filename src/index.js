@@ -1,18 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
 import { theme } from "./theme";
-import { ThemeProvider } from "@material-ui/styles"
-
+import { ThemeProvider } from "@material-ui/styles";
+import { AuthContextProvider } from "./context/AuthContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-    <App />
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,5 +1,5 @@
+// post in feed
 import {
-  Container,
   makeStyles,
   Card,
   CardActionArea,
@@ -10,8 +10,9 @@ import {
   Button,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 const usestyles = makeStyles((theme) => ({
   media: {
@@ -32,15 +33,14 @@ const usestyles = makeStyles((theme) => ({
 const Post = ({ post }) => {
   const classes = usestyles();
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
-  const [like, setlike] = useState(post.likes);
+  const [usser, setuser] = useState({});
+  const { user: currentUser } = useContext(AuthContext);
+  const [like, setlike] = useState(post.likes.length);
   const [isliked, setisliked] = useState(false);
-  const likehandler = () => {
-    setlike(isliked ? like - 1 : like + 1);
-    setisliked(!isliked);
-  };
 
-  const [user, setuser] = useState({});
+  useEffect(() => {
+    setisliked(post.likes.includes(currentUser._id));
+  }, [currentUser._id, post.likes]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -49,6 +49,18 @@ const Post = ({ post }) => {
     };
     fetchUser();
   }, []);
+
+  const likehandler = async () => {
+    try {
+      const res = await axios.put("/posts" + post._id + "/like", {
+        userId: currentUser._id,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    setlike(isliked ? like - 1 : like + 1);
+    setisliked(!isliked);
+  };
 
   return (
     <Card className={classes.card}>

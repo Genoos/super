@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useRef } from "react";
 import {
   Grid,
   Paper,
@@ -13,6 +13,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import axios from "axios";
+import { useHistory } from "react-router";
 
 const usestyles = makeStyles((theme) => ({
   paper: {
@@ -28,6 +30,26 @@ const Signup = () => {
   const avatarStyle = { backgroundColor: "#1bbd7e" };
   const btnstyle = { margin: "8px 0" };
   const classes = usestyles();
+  const username = useRef();
+  const email = useRef();
+  const password = useRef();
+  const confirmPassword = useRef();
+  const history = useHistory();
+  const handleClick = async (e) => {
+    e.preventDefault();
+
+    const user = {
+      username: username.current.value,
+      email: email.current.value,
+      password: password.current.value,
+    };
+    try {
+      const res = await axios.post("/auth/register", user);
+      history.push("/login");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Grid>
       <Paper elevation={20} className={classes.paper}>
@@ -40,37 +62,48 @@ const Signup = () => {
             Please fill this form to create an account !
           </Typography>
         </Grid>
-        <form>
+        <form onSubmit={handleClick}>
           <TextField
             style={btnstyle}
             fullWidth
             label="Name"
             placeholder="Enter your name"
+            required
+            inputRef={username}
           />
           <TextField
             style={btnstyle}
             fullWidth
             label="Email"
             placeholder="Enter your email"
+            required
+            type="email"
+            inputRef={email}
           />
 
-          <TextField
+          {/* <TextField
             style={btnstyle}
             fullWidth
             label="Phone Number"
             placeholder="Enter your phone number"
-          />
+          /> */}
           <TextField
             fullWidth
             style={btnstyle}
             label="Password"
+            required
             placeholder="Enter your password"
+            type="password"
+            inputRef={password}
           />
           <TextField
             fullWidth
             style={btnstyle}
             label="Confirm Password"
+            required
+            minlength="8"
             placeholder="Confirm your password"
+            useRef={confirmPassword}
           />
           <FormControlLabel
             control={<Checkbox name="checkedA" />}

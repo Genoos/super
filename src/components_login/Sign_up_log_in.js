@@ -10,6 +10,7 @@ import { Container } from "@material-ui/core";
 const SignInOutContainer = () => {
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
+    event.preventDefault();
     setValue(newValue);
   };
 

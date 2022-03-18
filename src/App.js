@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 
 import { Grid } from "@material-ui/core";
@@ -9,9 +14,10 @@ import { makeStyles } from "@material-ui/core";
 import Add from "./components/Add";
 import Single from "./components_post/single";
 import SignInOutContainer from "./components_login/Sign_up_log_in";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useContext } from "react";
+
 import Profile from "./components_profile/profile";
+import { AuthContext } from "./context/AuthContext";
 
 const usestyles = makeStyles((theme) => ({
   right: {
@@ -32,25 +38,32 @@ const App = () => {
   //   };
   //   fetchPosts();
   // }, []);
+  const { user } = useContext(AuthContext);
 
   return (
     <Router>
       <div>
-        <Navbar />
         <Switch>
           <Route exact path="/">
-            <Grid container>
-              <Grid item sm={2} xs={2}>
-                <Leftbar />
-              </Grid>
-              <Grid item sm={7} xs={10}>
-                <Feed />
-              </Grid>
-              <Grid item sm={3} className={classes.right}>
-                <Rightbar />
-              </Grid>
-            </Grid>
-            <Add />
+            {user ? (
+              <>
+                <Navbar />
+                <Grid container>
+                  <Grid item sm={2} xs={2}>
+                    <Leftbar />
+                  </Grid>
+                  <Grid item sm={7} xs={10}>
+                    <Feed />
+                  </Grid>
+                  <Grid item sm={3} className={classes.right}>
+                    <Rightbar />
+                  </Grid>
+                </Grid>
+                <Add />
+              </>
+            ) : (
+              <SignInOutContainer />
+            )}
           </Route>
           <Route exact path="/post/:postId">
             <Grid container>
@@ -62,7 +75,7 @@ const App = () => {
             </Grid>
           </Route>
           <Route exact path="/login">
-            <SignInOutContainer />
+            {user ? <Redirect to="/" /> : <SignInOutContainer />}
           </Route>
           <Route exact path="/profile/:username">
             <Grid container>
