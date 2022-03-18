@@ -64,14 +64,13 @@ const App = () => {
           <Route exact path="/login">
             <SignInOutContainer />
           </Route>
-          <Route exact path="/profile">
+          <Route exact path="/profile/:username">
             <Grid container>
               <Grid item sm={2} xs={2}>
                 <Leftbar />
               </Grid>
               <Grid item sm={10} xs={10}>
                 <Profile />
-                <Feed />
               </Grid>
             </Grid>
           </Route>
